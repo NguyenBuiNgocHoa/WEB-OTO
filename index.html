@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Đăng Nhập</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <form class="login-form" action="login_process.php" method="POST">
+    <h2>Đăng nhập OtO</h2>
+    <input type="text" name="username" placeholder="Tên đăng nhập" required>
+    <input type="password" name="password" placeholder="Mật khẩu" required>
+    <input type="submit" value="Đăng nhập">
+    <p><a href="#">Quên mật khẩu?</a></p>
+    <p id="error-message" style="color:red;"></p>
+  </form>
+  <script>
+    document.querySelector('.login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const username = document.querySelector('input[name="username"]').value;
+      const password = document.querySelector('input[name="password"]').value;
+      if(username === 'admin' && password === '123456') {
+        window.location.href = 'welcome.html';
+      } else {
+        document.getElementById('error-message').textContent = 'Sai tài khoản hoặc mật khẩu!';
+      }
+    });
+  </script>
+</body>
+</html>
