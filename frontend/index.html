@@ -3,131 +3,173 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Đăng nhập - OTO Showroom</title>
+  <title>VinFast 3D Showroom</title>
   <link rel="stylesheet" href="./assets/css/styles.css">
+  <link rel="stylesheet" href="./assets/css/trang_chinh.css">
 </head>
 <body>
-  <div class="auth-container">
-    <!-- Form đăng nhập -->
-    <form class="login-form" id="loginForm">
-      <h2>Đăng nhập OTO</h2>
-      <div class="form-group">
-        <input type="email" name="email" placeholder="Email" required>
-      </div>
-      <div class="form-group">
-        <input type="password" name="password" placeholder="Mật khẩu" required>
-      </div>
-      <button type="submit" class="btn-primary">Đăng nhập</button>
-      <p class="form-footer">
-        Chưa có tài khoản? <a href="#" id="showRegister">Đăng ký ngay</a>
-      </p>
-      <p id="login-error" class="error-message"></p>
-    </form>
+  <div id="authSection">
+    <div class="auth-container">
+      <!-- Form đăng nhập -->
+      <form class="login-form" id="loginForm">
+        <h2>Đăng nhập OTO</h2>
+        <div class="form-group">
+          <input type="email" name="email" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+          <input type="password" name="password" placeholder="Mật khẩu" required>
+        </div>
+        <button type="submit" class="btn-primary">Đăng nhập</button>
+        <p class="form-footer">
+          Chưa có tài khoản? <a href="#" id="showRegister">Đăng ký ngay</a>
+        </p>
+        <p id="login-error" class="error-message"></p>
+      </form>
+      <!-- Form đăng ký -->
+      <form class="register-form" id="registerForm" style="display: none;">
+        <h2>Đăng ký tài khoản</h2>
+        <div class="form-group">
+          <input type="text" name="fullName" placeholder="Họ và tên" required>
+        </div>
+        <div class="form-group">
+          <input type="email" name="email" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+          <input type="tel" name="phone" placeholder="Số điện thoại" required>
+        </div>
+        <div class="form-group">
+          <textarea name="address" placeholder="Địa chỉ" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <input type="password" name="password" placeholder="Mật khẩu" required>
+        </div>
+        <div class="form-group">
+          <input type="password" name="confirmPassword" placeholder="Xác nhận mật khẩu" required>
+        </div>
+        <button type="submit" class="btn-primary">Đăng ký</button>
+        <p class="form-footer">
+          Đã có tài khoản? <a href="#" id="showLogin">Đăng nhập</a>
+        </p>
+        <p id="register-error" class="error-message"></p>
+      </form>
+    </div>
+  </div>
 
-    <!-- Form đăng ký -->
-    <form class="register-form" id="registerForm" style="display: none;">
-      <h2>Đăng ký tài khoản</h2>
-      <div class="form-group">
-        <input type="text" name="fullName" placeholder="Họ và tên" required>
+  <div id="mainSection" style="display:none;">
+    <header>
+      <div class="header-left">
+        <a href="#" class="back-btn" id="logoutBtn">← Đăng xuất</a>
       </div>
-      <div class="form-group">
-        <input type="email" name="email" placeholder="Email" required>
+      <div class="stats">
+        <div>4<br><span>Dòng xe</span></div>
+        <div>100%<br><span>Điện hoá</span></div>
+        <div>50+<br><span>Quốc Gia</span></div>
+        <div>2030<br><span>Tầm nhìn</span></div>
       </div>
-      <div class="form-group">
-        <input type="tel" name="phone" placeholder="Số điện thoại" required>
+      <div class="header-right">
+        <div class="user-info" id="userInfo" style="display: none;">
+          <span id="userName">User</span>
+        </div>
       </div>
-      <div class="form-group">
-        <textarea name="address" placeholder="Địa chỉ" rows="2"></textarea>
-      </div>
-      <div class="form-group">
-        <input type="password" name="password" placeholder="Mật khẩu" required>
-      </div>
-      <div class="form-group">
-        <input type="password" name="confirmPassword" placeholder="Xác nhận mật khẩu" required>
-      </div>
-      <button type="submit" class="btn-primary">Đăng ký</button>
-      <p class="form-footer">
-        Đã có tài khoản? <a href="#" id="showLogin">Đăng nhập</a>
-      </p>
-      <p id="register-error" class="error-message"></p>
-    </form>
+    </header>
+    <main>
+      <section class="highlight">
+        <h1>VinFast Lux A2.0</h1>
+        <button class="badge">Xe Việt Nam đẳng cấp thế giới</button>
+        <div class="highlight-box">
+          <img src="./vinfast.jpg" alt="VinFast Lux A2.0" class="main-car-img">
+          <div class="info">
+            <h2>VinFast Lux A2.0</h2>
+            <ul class="specs">
+              <li>Động cơ: 2.0L tăng áp</li>
+              <li>Hộp số: Tự động 8 cấp</li>
+              <li>Công suất: 228 mã lực</li>
+              <li>Tăng tốc 0-100km/h: 7.9 giây</li>
+              <li>Giá: 1.2 tỷ VNĐ</li>
+            </ul>
+            <button class="btn">Khám phá xe</button>
+          </div>
+        </div>
+      </section>
+      <section class="models">
+        <h2>Dòng xe VinFast khác</h2>
+        <div class="grid">
+          <div class="card">
+            <img src="./vinfast1.jpg" alt="Lux SA2.0">
+            <h3>VinFast Lux SA2.0</h3>
+            <p>SUV hạng sang, 7 chỗ, động cơ 2.0L tăng áp</p>
+            <a href="#" class="model-btn">Xem chi tiết</a>
+          </div>
+          <div class="card">
+            <img src="./vinfast2.jpg" alt="VF e34">
+            <h3>VinFast VF e34</h3>
+            <p>Xe điện thông minh, 5 chỗ, tầm hoạt động 300km</p>
+            <a href="#" class="model-btn">Xem chi tiết</a>
+          </div>
+          <div class="card">
+            <img src="./vinfast3.jpg" alt="VF 8">
+            <h3>VinFast VF 8</h3>
+            <p>Mid-size SUV, xe điện, 5-7 chỗ</p>
+            <a href="#" class="model-btn">Xem chi tiết</a>
+          </div>
+          <div class="card">
+            <img src="./vinfast4.jpg" alt="VF 9">
+            <h3>VinFast VF 9</h3>
+            <p>Full-size SUV, xe điện, 7 chỗ</p>
+            <a href="#" class="model-btn">Xem chi tiết</a>
+          </div>
+        </div>
+      </section>
+      <section class="tech">
+        <h2>Công nghệ tiên tiến</h2>
+        <div class="features">
+          <div>
+            <h4>Điện hoá hoàn toàn</h4>
+            <p>Xe điện cho tương lai xanh và sạch</p>
+          </div>
+          <div>
+            <h4>AI thông minh</h4>
+            <p>Trợ lý ảo, lái xe tự động cấp độ cao</p>
+          </div>
+          <div>
+            <h4>An toàn tuyệt đối</h4>
+            <p>Tiêu chuẩn 5 sao từ Euro NCAP</p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <p>&copy; VinFast 3D Showroom</p>
+    </footer>
   </div>
 
   <script src="./scripts/api.js"></script>
+  <script src="./scripts/switch-auth.js"></script>
   <script>
-    // Chuyển đổi giữa form đăng nhập và đăng ký
-    document.getElementById('showRegister').addEventListener('click', function(e) {
-      e.preventDefault();
-      document.getElementById('loginForm').style.display = 'none';
-      document.getElementById('registerForm').style.display = 'block';
-    });
-
-    document.getElementById('showLogin').addEventListener('click', function(e) {
-      e.preventDefault();
-      document.getElementById('registerForm').style.display = 'none';
-      document.getElementById('loginForm').style.display = 'block';
-    });
-
-    // Xử lý đăng nhập
-    document.getElementById('loginForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      
-      const email = this.querySelector('input[name="email"]').value;
-      const password = this.querySelector('input[name="password"]').value;
-      const errorElement = document.getElementById('login-error');
-      
-      try {
-        errorElement.textContent = '';
-        const result = await apiService.login({ email, password });
-        
-        if (result.success) {
-          // Chuyển hướng đến trang chính
-          window.location.href = 'welcome.html';
-        }
-      } catch (error) {
-        errorElement.textContent = error.message;
-      }
-    });
-
-    // Xử lý đăng ký
-    document.getElementById('registerForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      
-      const formData = new FormData(this);
-      const userData = {
-        fullName: formData.get('fullName'),
-        email: formData.get('email'),
-        phone: formData.get('phone'),
-        address: formData.get('address'),
-        password: formData.get('password')
+  console.log('switch-auth.js loaded');
+  document.addEventListener('DOMContentLoaded', function() {
+    alert('Script chạy!');
+    var btnShowRegister = document.getElementById('showRegister');
+    var btnShowLogin = document.getElementById('showLogin');
+    var loginForm = document.getElementById('loginForm');
+    var registerForm = document.getElementById('registerForm');
+    if (btnShowRegister && loginForm && registerForm) {
+      btnShowRegister.onclick = function(e) {
+        e.preventDefault();
+        alert('Đã bấm Đăng ký ngay');
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
       };
-      
-      const confirmPassword = formData.get('confirmPassword');
-      const errorElement = document.getElementById('register-error');
-      
-      // Kiểm tra mật khẩu xác nhận
-      if (userData.password !== confirmPassword) {
-        errorElement.textContent = 'Mật khẩu xác nhận không khớp!';
-        return;
-      }
-      
-      try {
-        errorElement.textContent = '';
-        const result = await apiService.register(userData);
-        
-        if (result.success) {
-          // Chuyển hướng đến trang chính
-          window.location.href = 'welcome.html';
-        }
-      } catch (error) {
-        errorElement.textContent = error.message;
-      }
-    });
-
-    // Kiểm tra nếu đã đăng nhập thì chuyển hướng
-    if (apiService.isLoggedIn()) {
-      window.location.href = 'welcome.html';
     }
+    if (btnShowLogin && loginForm && registerForm) {
+      btnShowLogin.onclick = function(e) {
+        e.preventDefault();
+        alert('Đã bấm Đăng nhập');
+        registerForm.style.display = 'none';
+        loginForm.style.display = 'block';
+      };
+    }
+  });
   </script>
 </body>
 </html>

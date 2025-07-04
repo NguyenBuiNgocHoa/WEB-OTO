@@ -158,6 +158,21 @@ class ApiService {
       return null;
     }
   }
+
+  // Đặt xe (book test drive)
+  async bookTestDrive(carId, bookingDate) {
+    try {
+      const response = await fetch(`${this.baseURL}/bookings`, {
+        method: 'POST',
+        headers: this.getHeaders(),
+        body: JSON.stringify({ carId, bookingDate })
+      });
+      return await this.handleResponse(response);
+    } catch (error) {
+      console.error('❌ Lỗi đặt xe:', error.message);
+      throw error;
+    }
+  }
 }
 
 // Khởi tạo API service

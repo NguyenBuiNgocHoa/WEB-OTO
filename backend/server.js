@@ -2,10 +2,11 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const path = require('path');
 require('dotenv').config({ path: './config.env' });
 
 // Import các module
-const { connectDB } = require('./config/database');
+// const { connectDB } = require('./config/database');
 const { notFound, errorHandler } = require('./middleware/errorHandler');
 
 // Import routes
@@ -13,9 +14,6 @@ const userRoutes = require('./routes/userRoutes');
 
 // Khởi tạo app
 const app = express();
-
-// Kết nối database
-connectDB();
 
 // Middleware bảo mật
 app.use(helmet());
@@ -35,6 +33,9 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+// Serve static frontend
+app.use(express.static(path.join(__dirname, '../frontend')));
+
 // Routes
 app.use('/api/users', userRoutes);
 
@@ -48,17 +49,9 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Route mặc định
+// Route mặc định trả về index.html
 app.get('/', (req, res) => {
-  res.json({
-    success: true,
-    message: 'Chào mừng đến với API OTO Showroom',
-    version: '1.0.0',
-    endpoints: {
-      users: '/api/users',
-      health: '/api/health'
-    }
-  });
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
 // Middleware xử lý lỗi 404

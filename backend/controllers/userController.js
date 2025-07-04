@@ -8,10 +8,10 @@ const register = async (req, res) => {
     const { fullName, email, phone, password, address } = req.body;
 
     // Kiểm tra email đã tồn tại chưa
-    const checkEmailQuery = 'SELECT CustomerID FROM Customers WHERE Email = @param1';
+    const checkEmailQuery = 'SELECT CustomerID FROM Customers WHERE Email = ?';
     const emailCheck = await executeQuery(checkEmailQuery, [email]);
     
-    if (emailCheck.recordset.length > 0) {
+    if (emailCheck.length > 0) {
       return res.status(400).json({
         success: false,
         message: 'Email đã được sử dụng'
@@ -25,15 +25,16 @@ const register = async (req, res) => {
     // Thêm user mới vào database
     const insertQuery = `
       INSERT INTO Customers (FullName, Email, Phone, Address, PasswordHash)
-      OUTPUT INSERTED.CustomerID, INSERTED.FullName, INSERTED.Email, INSERTED.Phone, INSERTED.Address, INSERTED.CreatedAt
-      VALUES (@param1, @param2, @param3, @param4, @param5)
+      VALUES (?, ?, ?, ?, ?)
     `;
-    
-    const result = await executeQuery(insertQuery, [
+    await executeQuery(insertQuery, [
       fullName, email, phone, address || null, passwordHash
     ]);
 
-    const newUser = result.recordset[0];
+    // Lấy user vừa tạo
+    const getUserQuery = 'SELECT CustomerID, FullName, Email, Phone, Address, CreatedAt FROM Customers WHERE Email = ?';
+    const users = await executeQuery(getUserQuery, [email]);
+    const newUser = users[0];
 
     // Tạo JWT token
     const token = jwt.sign(
@@ -73,17 +74,17 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     // Tìm user theo email
-    const query = 'SELECT CustomerID, FullName, Email, Phone, Address, PasswordHash FROM Customers WHERE Email = @param1';
-    const result = await executeQuery(query, [email]);
+    const query = 'SELECT CustomerID, FullName, Email, Phone, Address, PasswordHash FROM Customers WHERE Email = ?';
+    const users = await executeQuery(query, [email]);
 
-    if (result.recordset.length === 0) {
+    if (users.length === 0) {
       return res.status(401).json({
         success: false,
         message: 'Email hoặc mật khẩu không đúng'
       });
     }
 
-    const user = result.recordset[0];
+    const user = users[0];
 
     // Kiểm tra mật khẩu
     const isPasswordValid = await bcrypt.compare(password, user.PasswordHash);
@@ -130,17 +131,17 @@ const getProfile = async (req, res) => {
   try {
     const userId = req.user.CustomerID;
 
-    const query = 'SELECT CustomerID, FullName, Email, Phone, Address, CreatedAt FROM Customers WHERE CustomerID = @param1';
-    const result = await executeQuery(query, [userId]);
+    const query = 'SELECT CustomerID, FullName, Email, Phone, Address, CreatedAt FROM Customers WHERE CustomerID = ?';
+    const users = await executeQuery(query, [userId]);
 
-    if (result.recordset.length === 0) {
+    if (users.length === 0) {
       return res.status(404).json({
         success: false,
         message: 'Không tìm thấy user'
       });
     }
 
-    const user = result.recordset[0];
+    const user = users[0];
 
     res.json({
       success: true,
@@ -172,23 +173,17 @@ const updateProfile = async (req, res) => {
     // Cập nhật thông tin user
     const updateQuery = `
       UPDATE Customers 
-      SET FullName = @param1, Phone = @param2, Address = @param3
-      OUTPUT INSERTED.CustomerID, INSERTED.FullName, INSERTED.Email, INSERTED.Phone, INSERTED.Address, INSERTED.CreatedAt
-      WHERE CustomerID = @param4
+      SET FullName = ?, Phone = ?, Address = ?
+      WHERE CustomerID = ?
     `;
-    
-    const result = await executeQuery(updateQuery, [
+    await executeQuery(updateQuery, [
       fullName, phone, address, userId
     ]);
 
-    if (result.recordset.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: 'Không tìm thấy user'
-      });
-    }
-
-    const updatedUser = result.recordset[0];
+    // Lấy lại thông tin user
+    const getUserQuery = 'SELECT CustomerID, FullName, Email, Phone, Address, CreatedAt FROM Customers WHERE CustomerID = ?';
+    const users = await executeQuery(getUserQuery, [userId]);
+    const updatedUser = users[0];
 
     res.json({
       success: true,
@@ -219,17 +214,17 @@ const changePassword = async (req, res) => {
     const { currentPassword, newPassword } = req.body;
 
     // Lấy mật khẩu hiện tại
-    const getPasswordQuery = 'SELECT PasswordHash FROM Customers WHERE CustomerID = @param1';
-    const result = await executeQuery(getPasswordQuery, [userId]);
+    const getPasswordQuery = 'SELECT PasswordHash FROM Customers WHERE CustomerID = ?';
+    const users = await executeQuery(getPasswordQuery, [userId]);
 
-    if (result.recordset.length === 0) {
+    if (users.length === 0) {
       return res.status(404).json({
         success: false,
         message: 'Không tìm thấy user'
       });
     }
 
-    const user = result.recordset[0];
+    const user = users[0];
 
     // Kiểm tra mật khẩu hiện tại
     const isCurrentPasswordValid = await bcrypt.compare(currentPassword, user.PasswordHash);
@@ -245,7 +240,7 @@ const changePassword = async (req, res) => {
     const newPasswordHash = await bcrypt.hash(newPassword, saltRounds);
 
     // Cập nhật mật khẩu mới
-    const updatePasswordQuery = 'UPDATE Customers SET PasswordHash = @param1 WHERE CustomerID = @param2';
+    const updatePasswordQuery = 'UPDATE Customers SET PasswordHash = ? WHERE CustomerID = ?';
     await executeQuery(updatePasswordQuery, [newPasswordHash, userId]);
 
     res.json({
@@ -268,10 +263,10 @@ const deleteAccount = async (req, res) => {
     const userId = req.user.CustomerID;
 
     // Xóa user
-    const deleteQuery = 'DELETE FROM Customers WHERE CustomerID = @param1';
+    const deleteQuery = 'DELETE FROM Customers WHERE CustomerID = ?';
     const result = await executeQuery(deleteQuery, [userId]);
 
-    if (result.rowsAffected[0] === 0) {
+    if (result.affectedRows === 0) {
       return res.status(404).json({
         success: false,
         message: 'Không tìm thấy user'
