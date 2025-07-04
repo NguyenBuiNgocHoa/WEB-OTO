@@ -8,12 +8,20 @@
 </head>
 <body>
   <header>
-    <a href="index.html" class="back-btn">← Quay lại Showroom 3D</a>
+    <div class="header-left">
+      <a href="index.html" class="back-btn">← Quay lại Showroom 3D</a>
+    </div>
     <div class="stats">
       <div>4<br><span>Dòng xe</span></div>
       <div>100%<br><span>Điện hoá</span></div>
       <div>50+<br><span>Quốc Gia</span></div>
       <div>2030<br><span>Tầm nhìn</span></div>
+    </div>
+    <div class="header-right">
+      <div class="user-info" id="userInfo" style="display: none;">
+        <span id="userName">User</span>
+        <button class="logout-btn" onclick="logout()">Đăng xuất</button>
+      </div>
     </div>
   </header>
 
@@ -89,5 +97,43 @@
   <footer>
     <p>&copy; VinFast 3D Showroom</p>
   </footer>
+
+  <script src="./scripts/api.js"></script>
+  <script>
+    // Kiểm tra đăng nhập khi trang load
+    document.addEventListener('DOMContentLoaded', function() {
+      if (!apiService.isLoggedIn()) {
+        // Nếu chưa đăng nhập, chuyển về trang đăng nhập
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // Hiển thị thông tin user
+      loadUserInfo();
+    });
+
+    // Hàm load thông tin user
+    async function loadUserInfo() {
+      try {
+        const result = await apiService.getProfile();
+        if (result.success) {
+          const userInfo = document.getElementById('userInfo');
+          const userName = document.getElementById('userName');
+          
+          userName.textContent = result.data.fullName;
+          userInfo.style.display = 'flex';
+        }
+      } catch (error) {
+        console.error('❌ Lỗi load thông tin user:', error.message);
+        // Nếu token không hợp lệ, đăng xuất
+        logout();
+      }
+    }
+
+    // Hàm đăng xuất
+    function logout() {
+      apiService.logout();
+    }
+  </script>
 </body>
 </html>
