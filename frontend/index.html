@@ -169,6 +169,35 @@
         loginForm.style.display = 'block';
       };
     }
+
+    // Xử lý submit form đăng ký
+    if (registerForm) {
+      registerForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const userData = {
+          fullName: form.fullName.value,
+          email: form.email.value,
+          phone: form.phone.value,
+          address: form.address.value,
+          password: form.password.value,
+          confirmPassword: form.confirmPassword.value
+        };
+        try {
+          const result = await apiService.register(userData);
+          if (result.success) {
+            alert('Đăng ký thành công! Vui lòng đăng nhập.');
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('register-error').textContent = '';
+          } else {
+            document.getElementById('register-error').textContent = result.message || 'Đăng ký thất bại!';
+          }
+        } catch (err) {
+          document.getElementById('register-error').textContent = err.message || 'Đăng ký thất bại!';
+        }
+      });
+    }
   });
   </script>
 </body>

@@ -179,4 +179,52 @@ class ApiService {
 const apiService = new ApiService();
 
 // Export để sử dụng trong các file khác
-window.apiService = apiService; 
+window.apiService = apiService;
+
+// Xử lý submit form đăng ký và đăng nhập
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Đăng ký
+  const registerForm = document.getElementById('registerForm');
+  if (registerForm) {
+    registerForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(registerForm);
+      const userData = {
+        fullName: formData.get('fullName'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        address: formData.get('address'),
+        password: formData.get('password'),
+        confirmPassword: formData.get('confirmPassword')
+      };
+      try {
+        const result = await apiService.register(userData);
+        alert('Đăng ký thành công!');
+        window.location.reload();
+      } catch (err) {
+        document.getElementById('register-error').textContent = err.message;
+      }
+    });
+  }
+
+  // Đăng nhập
+  const loginForm = document.getElementById('loginForm');
+  if (loginForm) {
+    loginForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(loginForm);
+      const credentials = {
+        email: formData.get('email'),
+        password: formData.get('password')
+      };
+      try {
+        const result = await apiService.login(credentials);
+        alert('Đăng nhập thành công!');
+        window.location.href = 'welcome.html';
+      } catch (err) {
+        document.getElementById('login-error').textContent = err.message;
+      }
+    });
+  }
+}); 

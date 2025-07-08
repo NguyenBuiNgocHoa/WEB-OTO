@@ -19,10 +19,10 @@ const authenticateToken = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
     // Kiểm tra user có tồn tại trong database không
-    const query = 'SELECT CustomerID, FullName, Email FROM Customers WHERE CustomerID = @param1';
+    const query = 'SELECT CustomerID, FullName, Email FROM Customers WHERE CustomerID = ?';
     const result = await executeQuery(query, [decoded.userId]);
     
-    if (result.recordset.length === 0) {
+    if (!result || result.length === 0) {
       return res.status(401).json({
         success: false,
         message: 'Token không hợp lệ'
@@ -30,7 +30,7 @@ const authenticateToken = async (req, res, next) => {
     }
 
     // Thêm thông tin user vào request
-    req.user = result.recordset[0];
+    req.user = result[0];
     next();
   } catch (error) {
     if (error.name === 'JsonWebTokenError') {
@@ -61,11 +61,11 @@ const optionalAuth = async (req, res, next) => {
 
     if (token) {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const query = 'SELECT CustomerID, FullName, Email FROM Customers WHERE CustomerID = @param1';
+      const query = 'SELECT CustomerID, FullName, Email FROM Customers WHERE CustomerID = ?';
       const result = await executeQuery(query, [decoded.userId]);
       
-      if (result.recordset.length > 0) {
-        req.user = result.recordset[0];
+      if (result && result.length > 0) {
+        req.user = result[0];
       }
     }
     next();

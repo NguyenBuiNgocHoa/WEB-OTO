@@ -11,6 +11,7 @@ const { notFound, errorHandler } = require('./middleware/errorHandler');
 
 // Import routes
 const userRoutes = require('./routes/userRoutes');
+const bookingRoutes = require('./routes/bookingRoutes');
 
 // Khởi tạo app
 const app = express();
@@ -38,6 +39,7 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Routes
 app.use('/api/users', userRoutes);
+app.use('/api/bookings', bookingRoutes);
 
 // Route kiểm tra sức khỏe server
 app.get('/api/health', (req, res) => {

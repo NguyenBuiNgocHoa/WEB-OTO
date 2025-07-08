@@ -30,10 +30,8 @@ const validateRegister = [
     .withMessage('Số điện thoại không hợp lệ'),
   
   body('password')
-    .isLength({ min: 6 })
-    .withMessage('Mật khẩu phải có ít nhất 6 ký tự')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
-    .withMessage('Mật khẩu phải chứa chữ hoa, chữ thường và số'),
+    .isLength({ min: 2 })
+    .withMessage('Mật khẩu phải có ít nhất 2 ký tự'),
   
   body('address')
     .optional()

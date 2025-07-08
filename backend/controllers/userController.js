@@ -5,12 +5,13 @@ const { executeQuery } = require('../config/database');
 // Đăng ký user mới
 const register = async (req, res) => {
   try {
+    console.log('==> [REGISTER] Body:', req.body);
     const { fullName, email, phone, password, address } = req.body;
 
     // Kiểm tra email đã tồn tại chưa
     const checkEmailQuery = 'SELECT CustomerID FROM Customers WHERE Email = ?';
     const emailCheck = await executeQuery(checkEmailQuery, [email]);
-    
+    console.log('==> [REGISTER] Email check:', emailCheck);
     if (emailCheck.length > 0) {
       return res.status(400).json({
         success: false,
@@ -27,14 +28,16 @@ const register = async (req, res) => {
       INSERT INTO Customers (FullName, Email, Phone, Address, PasswordHash)
       VALUES (?, ?, ?, ?, ?)
     `;
-    await executeQuery(insertQuery, [
+    const insertResult = await executeQuery(insertQuery, [
       fullName, email, phone, address || null, passwordHash
     ]);
+    console.log('==> [REGISTER] Insert result:', insertResult);
 
     // Lấy user vừa tạo
     const getUserQuery = 'SELECT CustomerID, FullName, Email, Phone, Address, CreatedAt FROM Customers WHERE Email = ?';
     const users = await executeQuery(getUserQuery, [email]);
     const newUser = users[0];
+    console.log('==> [REGISTER] New user:', newUser);
 
     // Tạo JWT token
     const token = jwt.sign(
@@ -60,10 +63,11 @@ const register = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Lỗi đăng ký:', error.message);
+    console.error('❌ Lỗi đăng ký:', error.message, error);
     res.status(500).json({
       success: false,
-      message: 'Lỗi server'
+      message: 'Lỗi server',
+      error: error.message
     });
   }
 };
